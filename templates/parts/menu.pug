@@ -1,0 +1,7 @@
+- var items = [{url:"/accueil", text:"Accueil"},{url:"/produits", text:"Nos produits"},{text:"Nos services",url:"/services"},{url:"/contact", text:"Contact"}];
+
+nav(class="navbar navbar-expand navbar-light bg-light")
+    ul(class="navbar-nav")
+        each item in items
+            li(class="nav-item")
+                a(class="nav-link", href=item.url)= item.text

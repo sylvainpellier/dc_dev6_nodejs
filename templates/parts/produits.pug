@@ -1,0 +1,12 @@
+div(class="container mt-4")
+    div(class="row")
+
+        div("class=col-12 mb-5")
+            h1(class="text-center") Nos produits
+
+        each produit in liste
+            div(class="col")
+
+                img(src="/images/"+produit.image, class="img-fluid")
+                div(class="text-center")= produit.name
+                div(class="text-center")= produit.price + "€"

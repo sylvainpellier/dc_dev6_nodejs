@@ -1,0 +1,17 @@
+div(class="container mt-4")
+    div(class="row")
+
+        div("class=col-12  mb-5")
+            h1(class="text-center mb-4") Nos services
+
+        each service in services
+            div(class="col")
+
+                h3(class="text-center")= service.name
+                div(class="text-center")= service.description
+
+                if service.disponible
+
+                    div(class="alert text-center alert-success") disponible
+                else
+                    div(class="alert text-center alert-danger") non disponible
