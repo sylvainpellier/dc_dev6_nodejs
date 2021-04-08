@@ -1,0 +1,48 @@
+extends layouts/layout
+
+block content
+
+    //on hérite du modèle et de ce code pug
+
+    //on vient définir le contenu du bloc content pour lui donner son contenu final
+
+    h1 Rechercher
+
+    form(class="col-12", method="post")
+        div(class="form-group mt-3")
+            label Nom ou description (exact ou partiel)
+            input(type="text", name="name", value=name class="form-control")
+
+        div(class="form-group mt-3")
+            label Prix max
+            input(class="form-control", name="price", value=price type="number")
+
+        div(class="form-group mt-3")
+            input(type="submit", class="btn btn-primary d-md-block", value="Rechercher")
+
+
+    if produits && produits.length === 0 && (name || price)
+
+        div(class="alert alert-danger") Aucun résultat pour votre recherche
+
+    if produits && produits.length > 0
+
+        hr
+        h3 Résultat de votre recherche selon ces critères :
+
+        div(class="jumbotron")
+            ul
+
+                if name
+                    li nom ou description : #{name}
+
+                if price
+                    li prix maximum : #{price}€
+
+        hr
+        include parts/produits
+
+
+
+
+

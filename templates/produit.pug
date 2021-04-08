@@ -1,0 +1,23 @@
+extends layouts/layout.pug
+
+block content
+
+    //on hérite du modèle et de ce code pug
+
+    //on vient définir le contenu du bloc content pour lui donner son contenu final
+
+    div(class="col-4")
+        img(src="/images/" + produit.image, class="img-fluid")
+
+    div(class="col-8")
+        div
+            h1= produit.name
+        p <b>Description</b> : #{produit.description}
+        p <b>Tarif</b> : #{produit.price}€
+
+    div(class="col-12 mt-5")
+        hr
+        include parts/produits
+
+
+

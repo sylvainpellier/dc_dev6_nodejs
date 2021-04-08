@@ -1,0 +1,25 @@
+extends layouts/layout.pug
+
+block content
+
+    //on hérite du modèle et de ce code pug
+
+    //on vient définir le contenu du bloc content pour lui donner son contenu final
+
+    div(class="col-12")
+        div
+            h1= service.name
+        p <b>Description</b> : #{service.description}
+        if(service.disponible)
+            p <b>État</b> : Disponible
+        else
+            p <b>État</b> : Non disponible
+
+
+
+    div(class="col-12 mt-5")
+        hr
+        include parts/services
+
+
+

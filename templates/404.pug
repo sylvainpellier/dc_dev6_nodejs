@@ -1,5 +1,20 @@
+//
 html
     head
+        title #{title} - Site
+        link(href="/css/bootstrap.css", rel="stylesheet")
+        link(href="/css/main.css", rel="stylesheet")
 
     body
-        h1 404
+        include ../parts/menu
+        section(class="container mt-4 pb-5")
+
+            div(class="row pb-5")
+
+
+
+            div(class="jumbotron text-center")
+                h1(class="display-4") 404
+                p(class="lead") Une erreur 404 s'est produite ... désolé
+
+        include ../parts/footer

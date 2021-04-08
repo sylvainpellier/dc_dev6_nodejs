@@ -1,0 +1,20 @@
+//on définit un layout (modèle) qui pourra être appliqué à plusieurs autres pages pug ensuite
+//
+html
+    head
+        title #{title} - Site
+        link(href="/css/bootstrap.css", rel="stylesheet")
+        link(href="/css/main.css", rel="stylesheet")
+
+    body
+        include ../parts/menu
+        section(class="container mt-4 pb-5")
+
+            div(class="row pb-5")
+
+                //ici un on définit un bloc dont on choisit le nom
+                //le bloc ne contient rien car son contenu sera défini ensuite par les fichier pug qui hériteront de ce modèle
+                block content
+
+
+        include ../parts/footer

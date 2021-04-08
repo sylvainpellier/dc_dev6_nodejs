@@ -2,11 +2,16 @@ div(class="container mt-4")
     div(class="row")
 
         div("class=col-12 mb-5")
-            h1(class="text-center") Nos produits
+            if(!recherche)
+                h1(class="text-center") Nos produits
 
-        each produit in liste
-            div(class="col")
+        each p in produits
+            if !produit || produit && produit.id !== p.id
+                div(class="col")
 
-                img(src="/images/"+produit.image, class="img-fluid")
-                div(class="text-center")= produit.name
-                div(class="text-center")= produit.price + "€"
+                    img(src="/images/"+p.image, class="img-fluid img-thumbnail mb-2")
+                    a(class="btn rounded-0 mb-2 btn-primary d-md-block", href="/produit/"+p.id) Plus de détail
+
+                    div(class="text-center")
+                        b= p.name
+                    div(class="text-center")= p.price + "€"
