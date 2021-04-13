@@ -1,0 +1,35 @@
+extends layouts/layout.pug
+
+block content
+
+    //on hérite du modèle et de ce code pug
+
+    //on vient définir le contenu du bloc content pour lui donner son contenu final
+
+
+    div(class="col-12")
+        div
+            h1 Ajouter un restaurant
+
+
+            if added === true
+                div(class="alert alert-success") Restaurant ajouté avec succès (id : #{restaurant._id})
+            else if error === true
+                div(class="alert alert-danger") Une erreur s'est produite lors de l'ajout
+
+
+            form(class="col-12", method="post")
+                div(class="form-group mt-3")
+                    label Nom du restaurant
+                    input(type="text", name="name" class="form-control")
+
+                div(class="form-group mt-3")
+                    label Type de cuisine
+                    input(type="text", name="cuisine" class="form-control")
+
+                div(class="form-group mt-3")
+                    label Localisation
+                    input(type="text", name="borough" class="form-control")
+
+                div(class="form-group mt-3")
+                    input(type="submit", class="btn btn-primary d-md-block ", value="Ajouter")

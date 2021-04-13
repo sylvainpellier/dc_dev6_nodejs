@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 const path = require("path");
+const mongoose = require('mongoose');
+
+const SchemaRestaurant = require('./schemas/restaurants');
+const SchemaProduits = require('./schemas/produits');
+
 
 //configurer PUG
 app.set("view engine", "pug");
@@ -10,6 +15,11 @@ app.set("views", path.join(__dirname, "templates"));
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+
+mongoose.connect("mongodb+srv://sylvainpellier:qdNlI2acJDcfsX3Y@cluster0.jli9g.mongodb.net/sample_restaurants?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => { console.log('Votre connexion est  réussie'); } )
+    .catch(() => { console.log('Votre connexion a échoué') } );
 
 
 //en attendant de pouvoir avoir accès à une base de données on se créé un tableau avec nos données
@@ -62,6 +72,28 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use("/contact",(req, res, next) => {
     //lorsque cette url va être appelé on charge le fichier pug qui se trouve dans le dossier templates/contact.pug
     res.render("contact",{path:req.baseUrl, title:"Contact"});
+});
+
+app.use("/doUpdateRestaurant/:id",(req,res,next)=>{
+   let name = req.body.name;
+   let cuisine = req.body.cuisine;
+   let borough = req.body.borough;
+
+   let restaurant = { name, cuisine, borough};
+
+   Restaurants.updateOne({_id:req.params.id},restaurant).then(function(){
+       res.redirect("/restaurants")
+   }).catch(function(){  res.redirect("/404") })
+
+
+});
+
+app.use("/update/restaurant/:id",(req,res,next)=>{
+    let id = req.params.id;
+
+    Restaurants.findOne({_id:id}).then(restaurant => {
+        res.render("restaurant_update_redirect",{title:"Modi restaurant",restaurant});
+    })
 });
 
 app.use("/rechercher",(req, res, next) => {
@@ -125,8 +157,30 @@ app.use("/produit/:id",(req, res, next) => {
 });
 
 app.use("/service/:id",(req, res, next) => {
-    let service = services.find((item)=>item.id === parseInt(req.params.id));
-    if(!service) next(); else res.render("service", {path:req.baseUrl,  title:service.name, services, service });
+
+
+    //let service = services.find((item)=>item.id === parseInt(req.params.id));
+    //if(service !== undefined) next(); else res.render("service", {path:req.baseUrl,  title:service.name, services, service });
+
+    let idService = parseInt(req.params.id);
+
+    let service = false;
+    services.forEach(function(item){
+       if(item.id === idService)
+       {
+           service = item;
+       }
+
+    });
+
+
+    if(!service) {
+        next();
+    } else
+    {
+        res.render("service", {path:req.baseUrl,  title:service.name, services, service });
+    }
+
 });
 
 
@@ -136,7 +190,109 @@ app.use("/services",(req, res, next) => {
 
 
 app.use("/produits",(req, res, next) => {
-    res.render("produits", {path:req.baseUrl,  title:"Produits", produits });
+
+    SchemaProduits.find().then((produits)=>{
+        res.render("produits", {path:req.baseUrl,  title:"SchemaProduits", produits });
+    })
+
+});
+
+app.use("/restaurant/:id",(req,res,next) => {
+
+    let id = req.params.id;
+
+    SchemaRestaurant.findOne({_id:id}).then((restaurant)=> {
+        res.render("restaurant", {path: req.baseUrl, title: restaurant.name, restaurant});
+    }).catch(()=>{
+            res.redirect(404,"/404");
+    })
+
+
+});
+
+app.use("/delete_restaurant/:id",(req,res,next) => {
+
+    SchemaRestaurant.deleteOne({_id:req.params.id}).then(()=>{
+        res.redirect("/restaurants");
+    });
+
+});
+
+
+app.use("/add_restaurant",(req,res,next) => {
+
+    let name = req.body.name;
+    let cuisine = req.body.cuisine;
+    let borough = req.body.borough;
+
+    let added = null;
+    let error = null;
+
+    if (name && cuisine && borough) {
+        let restaurant = new SchemaRestaurant();
+        restaurant.name = name;
+        restaurant.cuisine = cuisine;
+        restaurant.borough = borough;
+
+
+        restaurant.save().then( (restaurant) =>
+        {
+            added = true;
+            res.render("restaurant_add", {path:req.baseUrl,  title:"Ajouter un restaurant", added, error, restaurant});
+        }).catch(error=>console.error(error));
+    } else
+    {
+        res.render("restaurant_add", {path: req.baseUrl, title: "Ajouter un restaurant", added, error});
+    }
+
+
+
+});
+
+
+app.use("/update_restaurant/:id",(req, res, next) => {
+
+    let name = req.body.name;
+    let cuisine = req.body.cuisine;
+    let borough = req.body.borough;
+
+    if (name && cuisine && borough) {
+
+            const restaurant = {
+                name, cuisine, borough
+            };
+
+            SchemaRestaurant.updateOne({_id: req.params.id}, restaurant ).then((restaurant)=>
+            {
+                SchemaRestaurant.findOne({_id: req.params.id} ).then((restaurant)=>
+                {
+                    res.render("restaurant_update", { title:"Modifier un restaurant", updated:true, restaurant });
+                })
+            })
+
+
+    } else
+    {
+        SchemaRestaurant.findOne({_id:req.params.id}).then((restaurant)=>{
+            res.render("restaurant_update", { title:"Modifier un restaurant", restaurant });
+        })
+    }
+
+});
+
+
+
+
+
+
+
+app.use("/restaurants",(req,res,next) => {
+
+    SchemaRestaurant.find({}).limit(20).sort({"_id":-1}).then((restaurants) => {
+
+    }).catch(function(){ });
+
+
 });
 
 

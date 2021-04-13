@@ -1,0 +1,24 @@
+extends layouts/layout.pug
+
+block content
+
+    //on hérite du modèle et de ce code pug
+
+    //on vient définir le contenu du bloc content pour lui donner son contenu final
+
+
+    if deleted
+        div(class="alert alert-success") Restaurant supprimé avec succès
+
+    each restaurant in restaurants
+        div(class="col-3 mb-3")
+            div(class="text-center p-3 border rounded")
+                h4= restaurant.name
+                h5= restaurant.borough
+                div(class="d-grid gap-2")
+                    a(href="/restaurant/"+restaurant._id, class="btn  btn-primary") voir la fiche
+                    a(href="/update_restaurant/" + restaurant._id, class="btn btn-block btn-secondary") modifier
+                    a(href="/delete_restaurant/"+restaurant._id, class="btn btn-block btn-danger") supprimer
+                    a(href="/update/restaurant/" + restaurant._id, class="btn btn-block btn-secondary") modifier
+
+

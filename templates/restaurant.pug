@@ -1,0 +1,18 @@
+extends layouts/layout.pug
+
+block content
+
+    //on hérite du modèle et de ce code pug
+
+    //on vient définir le contenu du bloc content pour lui donner son contenu final
+
+
+    div(class="col-12")
+        div
+            h1= restaurant.name
+        p <b>Localisation</b> : #{restaurant.borough}
+        p <b>Cuisine</b> : #{restaurant.cuisine}
+
+
+
+
