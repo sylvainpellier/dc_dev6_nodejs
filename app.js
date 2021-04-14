@@ -81,7 +81,7 @@ app.use("/doUpdateRestaurant/:id",(req,res,next)=>{
 
    let restaurant = { name, cuisine, borough};
 
-   Restaurants.updateOne({_id:req.params.id},restaurant).then(function(){
+    SchemaRestaurant.updateOne({_id:req.params.id},restaurant).then(function(){
        res.redirect("/restaurants")
    }).catch(function(){  res.redirect("/404") })
 
@@ -91,7 +91,7 @@ app.use("/doUpdateRestaurant/:id",(req,res,next)=>{
 app.use("/update/restaurant/:id",(req,res,next)=>{
     let id = req.params.id;
 
-    Restaurants.findOne({_id:id}).then(restaurant => {
+    SchemaRestaurant.findOne({_id:id}).then(restaurant => {
         res.render("restaurant_update_redirect",{title:"Modi restaurant",restaurant});
     })
 });
@@ -288,7 +288,9 @@ app.use("/update_restaurant/:id",(req, res, next) => {
 
 app.use("/restaurants",(req,res,next) => {
 
-    SchemaRestaurant.find({}).limit(20).sort({"_id":-1}).then((restaurants) => {
+    SchemaRestaurant.find().limit(20).sort({"_id":-1}).then((restaurants) => {
+
+        res.render("restaurants", { path:req.baseUrl, title:"Restaurants", restaurants });
 
     }).catch(function(){ });
 
