@@ -1,4 +1,4 @@
-extends layouts/layout.pug
+extends ../layouts/layout.pug
 
 block content
 
@@ -12,13 +12,8 @@ block content
             h1 Modifier un restaurant
 
 
-            if updated === true
-                div(class="alert alert-success") Restaurant modifié avec succès (id : #{restaurant._id})
-            else if error === true
-                div(class="alert alert-danger") Une erreur s'est produite lors de la modification
 
-
-            form(class="col-12", method="post")
+            form(class="col-12", action="/doUpdateRestaurant/"+restaurant._id, method="post")
                 div(class="form-group mt-3")
                     label Nom du restaurant
                     input(type="text", name="name", value=restaurant.name , class="form-control")

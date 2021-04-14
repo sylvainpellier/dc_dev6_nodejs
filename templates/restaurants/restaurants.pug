@@ -1,4 +1,4 @@
-extends layouts/layout.pug
+extends ../layouts/layout.pug
 
 block content
 
@@ -16,9 +16,9 @@ block content
                 h4= restaurant.name
                 h5= restaurant.borough
                 div(class="d-grid gap-2")
-                    a(href="/restaurant/"+restaurant._id, class="btn  btn-primary") voir la fiche
-                    a(href="/update_restaurant/" + restaurant._id, class="btn btn-block btn-secondary") modifier
-                    a(href="/delete_restaurant/"+restaurant._id, class="btn btn-block btn-danger") supprimer
+                    a(href="/restaurants/"+restaurant._id, class="btn  btn-primary") voir la fiche
+                    a(href="/restaurants/update/" + restaurant._id, class="btn btn-block btn-secondary") modifier
+                    a(href="/restaurants/delete/"+restaurant._id, class="btn btn-block btn-danger") supprimer
                     a(href="/update/restaurant/" + restaurant._id, class="btn btn-block btn-secondary") modifier
 
 
