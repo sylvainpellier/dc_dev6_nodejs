@@ -14,8 +14,9 @@ block content
 
             if added === true
                 div(class="alert alert-success") Restaurant ajouté avec succès (id : #{restaurant._id})
-            else if error === true
-                div(class="alert alert-danger") Une erreur s'est produite lors de l'ajout
+            else if errors.length > 0
+                each error in errors
+                    div(class="alert alert-danger") Une erreur s'est produite lors de l'ajout (manque #{error})
 
 
             form(class="col-12", method="post")

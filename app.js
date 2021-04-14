@@ -79,11 +79,19 @@ app.use("/doUpdateRestaurant/:id",(req,res,next)=>{
    let cuisine = req.body.cuisine;
    let borough = req.body.borough;
 
-   let restaurant = { name, cuisine, borough};
+   if(name && cuisine && borough) {
 
-    SchemaRestaurant.updateOne({_id:req.params.id},restaurant).then(function(){
-       res.redirect("/restaurants")
-   }).catch(function(){  res.redirect("/404") })
+       let restaurant = {name, cuisine, borough};
+
+       SchemaRestaurant.updateOne({_id: req.params.id}, restaurant).then(function () {
+           res.redirect("/restaurants")
+       }).catch(function () {
+           res.redirect("/404")
+       })
+   } else
+   {
+       res.redirect("/update/restaurant/"+req.params.id);
+   }
 
 
 });
@@ -226,9 +234,9 @@ app.use("/add_restaurant",(req,res,next) => {
     let borough = req.body.borough;
 
     let added = null;
-    let error = null;
 
     if (name && cuisine && borough) {
+
         let restaurant = new SchemaRestaurant();
         restaurant.name = name;
         restaurant.cuisine = cuisine;
@@ -237,12 +245,38 @@ app.use("/add_restaurant",(req,res,next) => {
 
         restaurant.save().then( (restaurant) =>
         {
-            added = true;
-            res.render("restaurant_add", {path:req.baseUrl,  title:"Ajouter un restaurant", added, error, restaurant});
-        }).catch(error=>console.error(error));
-    } else
+            res.render("restaurant_add", {path:req.baseUrl,  title:"Ajouter un restaurant", added:true, restaurant});
+        }).catch(()=>
+        {
+            res.render("restaurant_add", {path:req.baseUrl,  title:"Ajouter un restaurant", error:true, restaurant});
+
+        });
+    } else if(!name && !cuisine && !borough)
     {
-        res.render("restaurant_add", {path: req.baseUrl, title: "Ajouter un restaurant", added, error});
+        let errors = [];
+        res.render("restaurant_add", {path: req.baseUrl, title: "Ajouter un restaurant",errors});
+
+    }
+    else if(!name || !cuisine || !borough)
+    {
+        let errors = [];
+        if(!name)
+        {
+            errors.push("name");
+        }
+
+        if(!cuisine)
+        {
+            errors.push("cuisine");
+        }
+
+        if(!borough)
+        {
+            errors.push("borough");
+        }
+
+        res.render("restaurant_add", {path: req.baseUrl, title: "Ajouter un restaurant", errors});
+
     }
 
 
@@ -275,7 +309,7 @@ app.use("/update_restaurant/:id",(req, res, next) => {
     {
         SchemaRestaurant.findOne({_id:req.params.id}).then((restaurant)=>{
             res.render("restaurant_update", { title:"Modifier un restaurant", restaurant });
-        })
+        }).catch((error)=>{ res.redirect("/404"); });
     }
 
 });

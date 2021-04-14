@@ -13,7 +13,7 @@ block content
 
 
 
-            form(class="col-12", action="/doUpdateRestaurant/#{restaurant._id}" method="post")
+            form(class="col-12", action="/doUpdateRestaurant/"+restaurant._id, method="post")
                 div(class="form-group mt-3")
                     label Nom du restaurant
                     input(type="text", name="name", value=restaurant.name , class="form-control")
@@ -27,4 +27,4 @@ block content
                     input(type="text", name="borough", value=restaurant.borough, class="form-control")
 
                 div(class="form-group mt-3")
-                    input(type="submit", class="btn btn-primary d-md-block ", value="Ajouter")
+                    input(type="submit", class="btn btn-primary d-md-block ", value="Modifier")
